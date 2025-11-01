@@ -85,9 +85,13 @@ class AICoach:
 
     def _add_minutes(self, time_str: str, minutes: int) -> str:
         """Add minutes to a time string (HH:MM format)."""
-        time_obj = datetime.strptime(time_str, "%H:%M")
-        new_time = time_obj + timedelta(minutes=minutes)
-        return new_time.strftime("%H:%M")
+        try:
+            time_obj = datetime.strptime(time_str, "%H:%M")
+            new_time = time_obj + timedelta(minutes=minutes)
+            return new_time.strftime("%H:%M")
+        except ValueError:
+            # If invalid format, return original time
+            return time_str
 
     def _remove_task(self, task_name: str) -> None:
         """Remove a task from the schedule."""

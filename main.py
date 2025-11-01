@@ -13,6 +13,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 from stardom_flow import initialize_stardom_flow
 
 
+def _validate_time_format(time_str):
+    """Validate time format (HH:MM)."""
+    try:
+        from datetime import datetime
+        datetime.strptime(time_str, "%H:%M")
+        return True
+    except ValueError:
+        return False
+
+
 def display_menu():
     """Display the main menu options."""
     print("\n" + "=" * 60)
@@ -51,16 +61,26 @@ def update_preferences(coach):
     
     wake_time = input(f"Wake time [{coach.preferences['wake_time']}]: ").strip()
     if wake_time:
-        coach.preferences['wake_time'] = wake_time
+        if _validate_time_format(wake_time):
+            coach.preferences['wake_time'] = wake_time
+        else:
+            print("Invalid time format. Please use HH:MM format (e.g., 07:00)")
     
     sleep_time = input(f"Sleep time [{coach.preferences['sleep_time']}]: ").strip()
     if sleep_time:
-        coach.preferences['sleep_time'] = sleep_time
+        if _validate_time_format(sleep_time):
+            coach.preferences['sleep_time'] = sleep_time
+        else:
+            print("Invalid time format. Please use HH:MM format (e.g., 22:00)")
     
     work_hours = input(f"Work hours [{coach.preferences['work_hours']}]: ").strip()
     if work_hours:
         try:
-            coach.preferences['work_hours'] = int(work_hours)
+            hours = int(work_hours)
+            if 1 <= hours <= 24:
+                coach.preferences['work_hours'] = hours
+            else:
+                print("Invalid work hours. Please enter a value between 1 and 24.")
         except ValueError:
             print("Invalid number for work hours, keeping current value.")
     

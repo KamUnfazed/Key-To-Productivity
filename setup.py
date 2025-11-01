@@ -32,9 +32,4 @@ setup(
     install_requires=[
         "python-dateutil>=2.8.2",
     ],
-    entry_points={
-        "console_scripts": [
-            "key-to-productivity=main:main",
-        ],
-    },
 )
